@@ -6,5 +6,5 @@ muffin_v_chihuahua/data/chihuahua/*
 !muffin_v_chihuahua/data/chihuahua/.gitkeep
 muffin_v_chihuahua/inception_v3_weights_tf_dim_ordering_tf_kernels.h5
 
-01-simple-zip-packaging/*
-!01-simple-zip-packaging/Makefile
+simple-zip-packaging/*
+!simple-zip-packaging/Makefile
