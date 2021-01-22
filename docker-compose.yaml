@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  display-predictions-with-embedded-model:
+    image: display-predictions-with-embedded-model:v1
+    build:
+      context: .
+      dockerfile: embedded-model-dockerfile
+    environment:
+      - INFERENCE_HOST=localhost
+    ports:
+      - 8080:8080
+
+  display-predictions-with-model-as-a-service:
+    image: display-predictions-with-model-as-a-service:v1
+    build:
+      context: .
+      dockerfile: model-as-a-service-dockerfile
+    environment:
+      - INFERENCE_HOST=ml-web-service
+    ports:
+      - 8090:8090
+
+  ml-web-service:
+    image: ml-web-service:v1
+    build:
+      context: .
+      dockerfile: ml-web-service-dockerfile
+    ports:
+      - 8000:8000

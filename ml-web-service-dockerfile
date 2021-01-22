@@ -1,0 +1,28 @@
+FROM python:3.8.0-slim as web-service-builder
+RUN apt-get update \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+COPY muffin_v_chihuahua/ml_web_service.py muffin_v_chihuahua/classifier.py /app/
+WORKDIR /app
+RUN pip install --user -U pip && pip install --user --no-cache-dir \
+    keras==2.4.3 \
+    fastapi==0.63.0 \
+    uvicorn[standard]==0.13.3 \
+    tensorflow==2.4.0 \
+    Pillow==8.1.0 \
+    python-multipart==0.0.5
+
+FROM python:3.8.0-slim as model-builder
+RUN apt-get update \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+COPY muffin_v_chihuahua/inception_v3_weights_tf_dim_ordering_tf_kernels.h5 .
+
+FROM python:3.8.0-slim as app
+COPY --from=web-service-builder /root/.local /root/.local
+COPY --from=web-service-builder /app /app
+COPY --from=model-builder ./inception_v3_weights_tf_dim_ordering_tf_kernels.h5 /app
+WORKDIR /app
+ENV PATH=/root/.local/bin:$PATH
+EXPOSE 8000
+CMD ["uvicorn", "ml_web_service:app", "--host", "0.0.0.0", "--port", "8000"]

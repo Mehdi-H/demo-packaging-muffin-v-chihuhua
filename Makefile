@@ -49,4 +49,7 @@ package-wheel:
 	python setup.py bdist_wheel
 
 package-docker:
-	docker build -t muffin-v-chihuahua:embedded-v1 .
+	docker build -t muffin-v-chihuahua:embedded-v1 -f embedded-model-dockerfile .
+
+run-docker:
+	docker run -p 8080:8080 muffin-v-chihuahua:embedded-v1

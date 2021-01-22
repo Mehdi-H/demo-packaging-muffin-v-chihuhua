@@ -1,0 +1,22 @@
+FROM python:3.8.0-slim as builder
+RUN apt-get update \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+COPY muffin_v_chihuahua/display_predictions_with_model_as_a_service.py /app/
+WORKDIR /app
+RUN pip install --user -U pip && pip install --user --no-cache-dir \
+    numpy==1.19.4 \
+    Pillow==8.1.0 \
+    requests==2.25.1 \
+    streamlit==0.74.1 \
+    watchdog==1.0.2
+
+FROM python:3.8.0-slim as app
+COPY --from=builder /root/.local /root/.local
+COPY --from=builder /app /app
+COPY muffin_v_chihuahua/data/ /app/data
+WORKDIR /app
+ENV PATH=/root/.local/bin:$PATH
+ENV INFERENCE_HOST localhost
+EXPOSE 8090
+CMD streamlit run display_predictions_with_model_as_a_service.py --server.port 8090
