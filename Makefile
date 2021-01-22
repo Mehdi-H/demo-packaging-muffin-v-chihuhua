@@ -23,7 +23,7 @@ create-env:
 
 .PHONY: dependencies  ## 🐍 ⬇️ Install python dependencies
 dependencies:
-	pip install -r requirements.txt
+	pip install .
 
 .PHONY: chihuahua-dataset  ## 🐶 ⬇️ Download some chihuahua images
 chihuahua-dataset:
@@ -43,3 +43,10 @@ datasets: chihuahua-dataset muffin-dataset
 .PHONY: model  ## 🧠 ⬇️ Download a model to classify muffin and chihuahua images
 model:
 	wget -nc https://github.com/fchollet/deep-learning-models/releases/download/v0.5/inception_v3_weights_tf_dim_ordering_tf_kernels.h5 -O muffin_v_chihuahua/inception_v3_weights_tf_dim_ordering_tf_kernels.h5 || true
+
+.PHONY: package-wheel  ## 📦 packaging the application as a Wheel
+package-wheel:
+	python setup.py bdist_wheel
+
+package-docker:
+	docker build -t muffin-v-chihuahua:embedded-v1 .
