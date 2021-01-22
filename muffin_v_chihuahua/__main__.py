@@ -1,6 +1,7 @@
 import os
 import click
 from streamlit import cli
+from streamlit.cli import configurator_options, _apply_config_options_from_cli
 
 
 @click.group()
@@ -8,12 +9,13 @@ def main():
     pass
 
 
-@main.command("muffin-v-chihuahua")
-def main_streamlit():
+@main.command("run-demo")
+@configurator_options
+def main_streamlit(**kwargs):
     dirname = os.path.dirname(__file__)
     filename = os.path.join(dirname, 'display_predictions_with_an_embedded_model.py')
-    args = []
-    cli._main_run(filename, args)
+    _apply_config_options_from_cli(kwargs)
+    cli._main_run(filename)
 
 
 if __name__ == "__main__":

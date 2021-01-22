@@ -8,3 +8,6 @@ muffin_v_chihuahua/inception_v3_weights_tf_dim_ordering_tf_kernels.h5
 
 simple-zip-packaging/*
 !simple-zip-packaging/Makefile
+/muffin_v_chihuahua.egg-info/
+/build/
+/dist/
